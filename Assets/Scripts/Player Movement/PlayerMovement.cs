@@ -140,9 +140,17 @@ public class PlayerMovement : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, ground);
 
-        if(runCrouch)
+        if (runCrouch)
         {
             Crouch();
+        }
+
+        if (isGrounded && !isCrouching)
+        {
+            canSlide = true;
+        } else
+        {
+            canSlide = false;
         }
 
         MyInput();
