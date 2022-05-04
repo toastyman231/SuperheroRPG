@@ -81,6 +81,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Primary"",
+                    ""type"": ""Button"",
+                    ""id"": ""15e04ab5-4c90-40e3-9ea4-33a381ce6993"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -347,6 +355,28 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Vertical"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""69d93e8b-2ca9-49de-8e00-58bf92aabeff"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Primary"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4c440704-60e8-4c56-a0f6-55d09066fb24"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Primary"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -391,6 +421,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Gameplay_Sprint = m_Gameplay.FindAction("Sprint", throwIfNotFound: true);
         m_Gameplay_Crouch = m_Gameplay.FindAction("Crouch", throwIfNotFound: true);
         m_Gameplay_Slide = m_Gameplay.FindAction("Slide", throwIfNotFound: true);
+        m_Gameplay_Primary = m_Gameplay.FindAction("Primary", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -448,6 +479,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Sprint;
     private readonly InputAction m_Gameplay_Crouch;
     private readonly InputAction m_Gameplay_Slide;
+    private readonly InputAction m_Gameplay_Primary;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -460,6 +492,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Gameplay_Sprint;
         public InputAction @Crouch => m_Wrapper.m_Gameplay_Crouch;
         public InputAction @Slide => m_Wrapper.m_Gameplay_Slide;
+        public InputAction @Primary => m_Wrapper.m_Gameplay_Primary;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -493,6 +526,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Slide.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlide;
                 @Slide.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlide;
                 @Slide.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlide;
+                @Primary.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPrimary;
+                @Primary.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPrimary;
+                @Primary.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPrimary;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -521,6 +557,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Slide.started += instance.OnSlide;
                 @Slide.performed += instance.OnSlide;
                 @Slide.canceled += instance.OnSlide;
+                @Primary.started += instance.OnPrimary;
+                @Primary.performed += instance.OnPrimary;
+                @Primary.canceled += instance.OnPrimary;
             }
         }
     }
@@ -553,5 +592,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
         void OnSlide(InputAction.CallbackContext context);
+        void OnPrimary(InputAction.CallbackContext context);
     }
 }
