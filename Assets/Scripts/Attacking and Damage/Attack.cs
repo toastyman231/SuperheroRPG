@@ -7,7 +7,7 @@ public class Attack
     private string attackName { get; set; }
     private int baseDamage = 10;
     private Animator playerAnim { get; set; }
-    private string attackTriggerName = "Attack";
+    private string attackTriggerName = "Primary";
 
     public Attack(string name, int damage, Animator anim, string trigger)
     {

@@ -12,6 +12,7 @@ public class PlayerLook : MonoBehaviour
     [SerializeField] private float sensY;
     [SerializeField] Transform cam;
     [SerializeField] Transform orientation;
+    public bool cameraEnabled = true;
     float mouseX, mouseY;
     float multiplier = 0.01f;
     float xRotation, yRotation;
@@ -24,15 +25,18 @@ public class PlayerLook : MonoBehaviour
 
     private void Update()
     {
-        mouseX = Mouse.current.delta.x.ReadValue();
-        mouseY = Mouse.current.delta.y.ReadValue();
+        if (cameraEnabled)
+        {
+            mouseX = Mouse.current.delta.x.ReadValue();
+            mouseY = Mouse.current.delta.y.ReadValue();
 
-        yRotation += mouseX * sensX * multiplier;
-        xRotation -= mouseY * sensY * multiplier;
+            yRotation += mouseX * sensX * multiplier;
+            xRotation -= mouseY * sensY * multiplier;
 
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        cam.transform.rotation = Quaternion.Euler(xRotation, yRotation, wallRun.tilt);
-        orientation.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+            cam.transform.rotation = Quaternion.Euler(xRotation, yRotation, wallRun.tilt);
+            orientation.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+        }
     }
 }
