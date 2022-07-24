@@ -18,14 +18,4 @@ public class ParticleController : MonoBehaviour
         yield return new WaitForSeconds(life);
         ps.transform.SetParent(null);
     }
-    /*private void OnParticleTrigger()
-    {
-        List<ParticleSystem.Particle> particles = new List<ParticleSystem.Particle>();
-        ParticlePhysicsExtensions.GetTriggerParticles(GetComponent<ParticleSystem>(), ParticleSystemTriggerEventType.Exit, particles);
-
-        foreach(ParticleSystem.Particle part in particles)
-        {
-            part.game
-        }
-    }*/
 }

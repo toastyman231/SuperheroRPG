@@ -5,5 +5,7 @@ using UnityEngine;
 public interface IDamageable
 {
     public void TakeDamage(int damageAmount);
-    public void OnTriggerEnter(Collider other);
+    public void OnCollisionEnter(Collision other); //For general purpose collisions
+    public void OnParticleCollision(GameObject other); //For attacks that use particles
+    public void OnDeath();
 }

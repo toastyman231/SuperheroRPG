@@ -16,12 +16,6 @@ public class PlayerInventory : MonoBehaviour
         AddItem(craftingRef.ing2, 3);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public ICraftable AddItem(ICraftable itemToAdd, int numToAdd)
     {
         inventory.Add(itemToAdd, numToAdd);
