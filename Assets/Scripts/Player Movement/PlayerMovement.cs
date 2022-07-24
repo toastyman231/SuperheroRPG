@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     [SerializeField] float moveSpeed = 6f;
     [SerializeField] float airMultiplier = 0.4f;
+    [SerializeField] float stamina = 100.0f;
     float movementMultiplier = 10f;
 
     [Header("Speed Settings")]
@@ -19,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float sprintSpeed = 6f;
     [SerializeField] float crouchSpeed = 2f;
     [SerializeField] float acceleration = 10f;
+    [SerializeField] float sprintCost = 0.5f;
     public bool canSprint = true;
     public bool sprinting;
 
@@ -43,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Crouching and Sliding")]
     [SerializeField] float slideForce = 40f;
+    [SerializeField] float slideCost = 10f;
     public bool canCrouch = true;
     public bool canSlide = true;
     public bool isCrouching { get; private set; }
@@ -68,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnSprint(InputAction.CallbackContext context)
     {
-        if(canSprint && context.started)
+        if(canSprint && context.started && stamina >= sprintCost)
         {
             sprinting = !sprinting;
         }
@@ -84,12 +87,14 @@ public class PlayerMovement : MonoBehaviour
 
     public async void OnSlide(InputAction.CallbackContext context)
     {
-        if(canSlide && context.started)
+        if(canSlide && context.started && stamina >= slideCost)
         {
             //OnCrouch();
             rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
             //rb.AddForce(rb.velocity.normalized * slideForce, ForceMode.Impulse);
-            if(verticalMovement > 0 || (verticalMovement == 0 && horizontalMovement == 0))
+            stamina -= slideCost;
+
+            if (verticalMovement > 0 || (verticalMovement == 0 && horizontalMovement == 0))
             {
                 canCrouch = false;
                 canJump = false;
@@ -153,6 +158,11 @@ public class PlayerMovement : MonoBehaviour
             canSlide = false;
         }
 
+        if(stamina < sprintCost || (horizontalMovement == 0 && verticalMovement == 0))
+        {
+            sprinting = false;
+        }
+
         MyInput();
         ControlDrag();
         ControlSpeed();
@@ -192,7 +202,8 @@ public class PlayerMovement : MonoBehaviour
         if(sprinting && !isCrouching)
         {
             moveSpeed = Mathf.Lerp(moveSpeed, sprintSpeed, acceleration * Time.deltaTime);
-        } else if(isCrouching)
+            stamina -= sprintCost * Time.deltaTime;
+        } else if (isCrouching)
         {
             moveSpeed = Mathf.Lerp(moveSpeed, crouchSpeed, acceleration * Time.deltaTime);
         } else
@@ -246,4 +257,8 @@ public class PlayerMovement : MonoBehaviour
         transform.localScale = newVector;
     }
 
+    public float GetStamina()
+    {
+        return stamina;
+    }
 }
